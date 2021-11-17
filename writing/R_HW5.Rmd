@@ -5,15 +5,13 @@ date: "11/16/2021"
 output: word_document
 ---
 
-```{r setup, include=FALSE, message = FALSE, echo = TRUE}
+```{r setup, include=FALSE, message = FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
 ```
 
-```{r}
+```{r Read Data}
+setwd("C:/Users/elmor/OneDrive/Documents/R_HW5")
 library(readr)
 homicide <- read_csv("data/homicide-data.csv")
 View(homicide)
-
-
 ```
