@@ -1,0 +1,18 @@
+---
+title: "R_Homework5"
+author: "Stacey Elmore"
+date: "11/16/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+homicide <- read_csv("data/homicide-data.csv")
+View(homicide)
+
+
+```
