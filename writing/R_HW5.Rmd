@@ -15,3 +15,20 @@ library(readr)
 homicide <- read_csv("data/homicide-data.csv")
 View(homicide)
 ```
+
+- Choice 1
+
+1. Pick one city in the data.
+
+2. Create a map showing the locations of the homicides in that city, using the sf framework discussed in class. Use tigris to download boundaries for some sub-city geography (e.g., tracts, block groups, county subdivisions) to show as a layer underneath the points showing homicides. 
+
+3. Use different facets for solved versus unsolved homicides and different colors to show the three race groups with the highest number of homicides for that city (you may find the fct_lump function from forcats useful for this).
+
+```{r Figure}
+library(tidyverse)
+library(viridis)
+library(tigris)
+
+
+
+```
