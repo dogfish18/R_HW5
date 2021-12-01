@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 setwd("C:/Users/elmor/OneDrive/Documents/R_HW5")
 library(readr)
 homicide <- read_csv("data/homicide-data.csv")
-View(homicide)
+#View(homicide)
 ```
 
 - Choice 1
@@ -41,27 +41,33 @@ homicide <- homicide %>%
 chi_hom <- st_as_sf(homicide, coords = c("lon", "lat")) %>% 
   st_set_crs(4269)
 
-
+##add map of chicago area
 ch_homicide_map <- counties(state = "IL", cb = TRUE, class = "sf") 
 ch_map <- ch_homicide_map %>% 
   filter(NAME == "Cook")
-water <- area_water("IL", "Cook", class = "sf") %>% 
-  st_set_crs(4269)
+
+##add water
+water <- area_water("IL", "Cook", class = "sf")
 class(ch_homicide_map$geometry)
-#chi_boundary <- places(state = "IL")
-  
-  #filter(cb, NAME == "Chicago") %>% 
+
 cb <- core_based_statistical_areas(cb = TRUE)
-chi_boundary <- filter(cb, grepl("Chicago", NAME))  
+#chi_boundary <- filter(cb, grepl("IL", "Chicago"))   
+places <-places(state = "IL", cb = TRUE)
+chi_bound2 <-filter(places, NAME == "Chicago")
 
+
+#chi_roads <- primary_roads(class = "sf") %>% 
+  
+
+                           
 ggplot() + 
-  geom_sf(data = chi_boundary) +
+  geom_sf(data = chi_bound2) +
   geom_sf(data = water, color = "aquamarine1", fill = "aquamarine1") +
-  geom_sf(data = chi_hom, aes(color = disposition))
-  geom_polygon(data = water, label = "Lake Michigan") 
+  geom_sf(data = chi_hom, aes(color = disposition)) +
+  #geom_sf(data = chi_roads, color = "orchid4") 
+  #geom_polygon(data = water, label = "Lake Michigan") 
 
-ggplot()+
-  geom_sf(data = chi_boundary)
+
 ```
 
 Choice 2:
