@@ -30,22 +30,38 @@ library(tidyverse)
 library(viridis)
 library(tigris)
 library(sf)
+options(tigris_class = "sf")
+options(tigris_use_cache = TRUE)
 
+### filter to Chicago homicides
 homicide <- homicide %>%
   filter(city == "Chicago")
+
+### make homocide a sf file (add spatial coordinates using NAD83)
 chi_hom <- st_as_sf(homicide, coords = c("lon", "lat")) %>% 
   st_set_crs(4269)
+
 
 ch_homicide_map <- counties(state = "IL", cb = TRUE, class = "sf") 
 ch_map <- ch_homicide_map %>% 
   filter(NAME == "Cook")
-
+water <- area_water("IL", "Cook", class = "sf") %>% 
+  st_set_crs(4269)
 class(ch_homicide_map$geometry)
+#chi_boundary <- places(state = "IL")
+  
+  #filter(cb, NAME == "Chicago") %>% 
+cb <- core_based_statistical_areas(cb = TRUE)
+chi_boundary <- filter(cb, grepl("Chicago", NAME))  
 
 ggplot() + 
-  geom_sf(data = ch_map) +
-  geom_sf(data = chi_hom, aes(color = disposition)) 
+  geom_sf(data = chi_boundary) +
+  geom_sf(data = water, color = "aquamarine1", fill = "aquamarine1") +
+  geom_sf(data = chi_hom, aes(color = disposition))
+  geom_polygon(data = water, label = "Lake Michigan") 
 
+ggplot()+
+  geom_sf(data = chi_boundary)
 ```
 
 Choice 2:
