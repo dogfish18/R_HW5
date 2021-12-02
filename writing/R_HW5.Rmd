@@ -36,7 +36,14 @@ options(tigris_use_cache = TRUE)
 
 ### filter to Chicago homicides
 homicide <- homicide %>%
-  filter(city == "Chicago")
+  filter(city == "Chicago") 
+  
+homicide <- homicide %>% 
+  mutate(disposition = recode(disposition,
+                   'Closed by arrest' = "Solved Cases",
+                   'Closed without arrest' = "Unsolved Cases",
+                   'Open/No arrest' = "Unsolved Cases"))
+
 
 ### make homocide a sf file (add spatial coordinates using NAD83)
 chi_hom <- st_as_sf(homicide, coords = c("lon", "lat")) %>% 
@@ -48,18 +55,20 @@ places <-places(state = "IL", cb = TRUE)
 chi_bound2 <-filter(places, NAME == "Chicago")
 
 
-##add water and road
+##add water and census tracts
 water <- area_water("IL", "Cook", class = "sf")
 tracts <- tracts("IL", "Cook", class = "sf")
 
 ##group homicide victims into race groups
-hom_groups <- fct_lump(chi_hom$victim_race, n = 3)
+hom_groups <- fct_lump_n(chi_hom$victim_race, n = 3) 
+
 
 ggplot() + 
-  geom_sf(data = tracts, color = "gray") +
   geom_sf(data = chi_bound2, fill = NA) +
+  geom_sf(data = tracts, color = "gray", fill = NA) +
   geom_sf(data = water, color = "aquamarine1", fill = "aquamarine1") +
-  geom_sf(data = chi_hom, aes(color = hom_groups)) +
+  geom_sf(data = chi_hom, aes(color = hom_groups,
+                              alpha = 0.1)) +
   facet_grid(~disposition)
   
   #geom_sf(data = chi_roads, color = "orchid4") 
