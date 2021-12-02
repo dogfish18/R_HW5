@@ -48,26 +48,21 @@ ch_map <- ch_homicide_map %>%
 
 ##add water
 water <- area_water("IL", "Cook", class = "sf")
-class(ch_homicide_map$geometry)
+  
 
 cb <- core_based_statistical_areas(cb = TRUE)
 #chi_boundary <- filter(cb, grepl("IL", "Chicago"))   
 places <-places(state = "IL", cb = TRUE)
 chi_bound2 <-filter(places, NAME == "Chicago")
 
-
 #chi_roads <- primary_roads(class = "sf") %>% 
   
-
-                           
 ggplot() + 
   geom_sf(data = chi_bound2) +
   geom_sf(data = water, color = "aquamarine1", fill = "aquamarine1") +
-  geom_sf(data = chi_hom, aes(color = disposition)) +
+  geom_sf(data = chi_hom, aes(color = disposition)) 
   #geom_sf(data = chi_roads, color = "orchid4") 
   #geom_polygon(data = water, label = "Lake Michigan") 
-
-
 ```
 
 Choice 2:
