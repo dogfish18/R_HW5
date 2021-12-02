@@ -3,14 +3,13 @@ title: "R_Homework5"
 author: "Stacey Elmore"
 date: "11/16/2021"
 output:
-  html_document:
-    df_print: paged
-  word_document: default
   pdf_document: default
+  word_document: default
+ 
 ---
 
 ```{r setup, include=FALSE, message = FALSE, warning = FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r Read Data, message = FALSE, warning = FALSE}
@@ -18,6 +17,8 @@ setwd("C:/Users/elmor/OneDrive/Documents/R_HW5")
 library(readr)
 homicide <- read_csv("data/homicide-data.csv")
 #View(homicide)
+setwd("C:/Users/elmor/OneDrive/Documents/R_HW5/writing")
+
 ```
 
 - Choice 1
@@ -32,6 +33,7 @@ homicide <- read_csv("data/homicide-data.csv")
 ```{r Figure}
 library(tidyverse)
 library(tigris)
+library(tinytex)
 library(sf)
 options(tigris_class = "sf")
 options(tigris_use_cache = TRUE)
