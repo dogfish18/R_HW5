@@ -9,22 +9,20 @@ startrek <- readr::read_csv(
 #tidy the data
 startrek_tidy <- startrek %>% 
   unnest_tokens(words, line) %>% 
-  anti_join(stop_words)
-
+  unlist(words)
+  #anti_join(stop_words)
 
 ######Sentiment Analysis######
-
 #sent_afinn <- get_sentiments("afinn")
 #sent_nrc <- get_sentiments("nrc")
 #sent_loughran <- get_sentiments("loughran")
 
 #get sentiments from bing dataset (pos/neg)
-
-sentiment <- get_sentiments("bing")
-
-startrek_tidy %>% 
-  inner_join(words, sentiment, copy = TRUE)
-  count() %>% 
+sentiment <- unlist(get_sentiments("bing")) 
+ 
+star_sent <- startrek_tidy %>% 
+  inner_join(sentiment, startrek_tidy, by = c("words" = "words"), copy = TRUE) 
+    count(word, sort = TRUE) %>% 
     pivot_wider(names_from = , values_from = n, values_fill = 0) %>% 
     mutate(sentiment = positive - negative)
 
