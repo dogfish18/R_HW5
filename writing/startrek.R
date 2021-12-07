@@ -1,39 +1,38 @@
-
 # Get the Data
-
-# Read in with tidytuesdayR package 
-# Install from CRAN via: install.packages("tidytuesdayR")
-# This loads the readme and all the datasets for the week of interest
-
-# Either ISO-8601 date or year/week works!
-
-tuesdata <- tidytuesdayR::tt_load('2021-08-17')
-tuesdata <- tidytuesdayR::tt_load(2021, week = 34)
-
-computer <- tuesdata$computer
-
-# Or read in the data manually
-
-computer <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv')
-
-
 library(tidyverse)
-library(jsonlite)
+library(tidytext)
+library(textdata)
 
-url <- "http://www.speechinteraction.org/TNG/teaearlgreyhotdataset.json"
+startrek <- readr::read_csv(
+  "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-17/computer.csv")
 
-raw_json <- parse_json(url(url))
+#tidy the data
+startrek_tidy <- startrek %>% 
+  unnest_tokens(words, line) %>% 
+  anti_join(stop_words)
 
-raw_json %>% 
-  listviewer::jsonedit()
 
-clean_df <- raw_json %>% 
-  enframe() %>% 
-  unnest_longer(value) %>% 
-  unnest_wider(value) %>% 
-  unnest_longer(type) %>% 
-  unnest_longer(domain) %>% 
-  unnest_longer(`sub-domain`) %>% 
-  janitor::clean_names()
+######Sentiment Analysis######
 
-clean_df %>% write_csv("2021/2021-08-17/computer.csv")
+#sent_afinn <- get_sentiments("afinn")
+#sent_nrc <- get_sentiments("nrc")
+#sent_loughran <- get_sentiments("loughran")
+
+#get sentiments from bing dataset (pos/neg)
+
+sentiment <- get_sentiments("bing")
+
+startrek_tidy %>% 
+  inner_join(words, sentiment, copy = TRUE)
+  count() %>% 
+    pivot_wider(names_from = , values_from = n, values_fill = 0) %>% 
+    mutate(sentiment = positive - negative)
+
+
+ggplot(startrek_sent, aes(index, sentiment, fill = line)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~line, ncol = 2, scales = "free_x")
+
+
+
+
