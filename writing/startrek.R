@@ -2,11 +2,8 @@
 library(tidyverse)
 library(tidytext)
 library(textdata)
-library(magrittr)
 library(reshape2)
-library(syuzhet)
 library(RColorBrewer)
-library(tm)
 library(viridis)
 
 startrek <- readr::read_csv(
@@ -101,8 +98,8 @@ afinn_join <- sent_afinn %>%
   count() 
 
 plot_afinn <- afinn_join %>% 
-  ggplot(aes(char, value, fill = value)) +
-  geom_bar(position = "stack", stat = "identity") +
+  ggplot(aes(char, n, fill = value)) +
+  geom_bar(position = "dodge", stat = "identity") +
   xlab("Character") +
   ylab("Sentiment Score") +
   labs(title = "TNG Character and Computer Interactions", 
@@ -118,3 +115,4 @@ plot_afinn <- afinn_join %>%
     axis.text.x = element_text(angle = 60, vjust = 0.5, hjust = 0.5),
   ) 
 print(plot_afinn)
+
